@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+/build
+
+.DS_Store
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+config.txt
+echobot
