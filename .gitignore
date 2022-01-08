@@ -40,3 +40,7 @@ Makefile
 cmake_install.cmake
 config.txt
 echobot
+.vscode/
+*.jpg
+*.mp4
+*.mov

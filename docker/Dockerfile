@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y apt-utils \
                                          wget \
                                          unzip \
                                          curl \
+                                         libcurl4-openssl-dev \
                                          git \
                                          mc \
                                          vim \
@@ -32,5 +33,5 @@ RUN apt-get update && apt-get install -y apt-utils \
 RUN git clone https://github.com/reo7sp/tgbot-cpp.git \
     && cd tgbot-cpp \
     && cmake . \
-    && make \
+    && make -j4 \
     && make install
