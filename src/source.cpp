@@ -4,11 +4,12 @@
 #include <exception>
 #include <string>
 #include <tgbot/tgbot.h>
+#include "filesystem_db.h"
 
 
 int max_size = 20480; // 20 Mbytes
 int max_duration = 30; // 30 seconds
-std::string token = "5052669338:AAGqa1tvOT3A2KAa4VByIcPH7F1g41M9L8s";
+std::string token = "5052669338:AAF9taIAHCa_ZPPMVDpiwsgaWjbecTiKiEc";
 
 int main() {
     TgBot::Bot bot(token);
@@ -46,7 +47,11 @@ int main() {
                 }
             }
         });
-    
+    bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message) {
+        bot.getApi().sendMessage(message->chat->id, "Как тебя зовут?");
+        printf("\x1B[34mChat start:\n\t\x1B[33mid: %l \x1B[0m\n", message->chat->id);
+        // #TODO create folder with user id
+    });
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");
         exit(0);

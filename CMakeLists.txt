@@ -9,11 +9,23 @@ find_package(OpenSSL REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 find_package(CURL)
 include_directories(/usr/local/include ${OPENSSL_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+add_library(filesystem_db 
+        src/filesystem_db.h
+        src/filesystem_db.cpp
+)
 if (CURL_FOUND)
     include_directories(${CURL_INCLUDE_DIRS})
     add_definitions(-DHAVE_CURL)
 endif()
 
+set(Libs     
+    /usr/local/lib/libTgBot.a
+    ${CMAKE_THREAD_LIBS_INIT} 
+    ${OPENSSL_LIBRARIES} 
+    ${Boost_LIBRARIES} 
+    ${CURL_LIBRARIES}
+    filesystem_db
+    )
 add_executable(echobot src/source.cpp)
 
-target_link_libraries(echobot /usr/local/lib/libTgBot.a ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${CURL_LIBRARIES})
+target_link_libraries(echobot ${Libs})
