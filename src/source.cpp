@@ -6,12 +6,12 @@
 #include <tgbot/tgbot.h>
 #include "filesystem_db.h"
 
-
 int max_size = 20480; // 20 Mbytes
 int max_duration = 30; // 30 seconds
-std::string token = "5052669338:AAF9taIAHCa_ZPPMVDpiwsgaWjbecTiKiEc";
-
+std::string token;
 int main() {
+    token = filesystem_database::get_token();
+    printf("\x1B[34mToken: \x1B[33m%s**********%s\x1B[0m\n", token.substr(0, 18).c_str(), token.substr(28, 46).c_str());
     TgBot::Bot bot(token);
     bot.getEvents().onAnyMessage([&bot](TgBot::Message::Ptr message) {
             /*
@@ -48,9 +48,14 @@ int main() {
             }
         });
     bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message) {
-        bot.getApi().sendMessage(message->chat->id, "Как тебя зовут?");
-        printf("\x1B[34mChat start:\n\t\x1B[33mid: %l \x1B[0m\n", message->chat->id);
+        long id = message->chat->id;
+        bool does_exist = filesystem_database::does_exist(id);
+        printf("\x1B[34mCommand [start]:\n\t\x1B[33mid: %ld\n\texist: %s\x1B[0m\n", id, (does_exist ? "true" : "false"));
+        bot.getApi().sendMessage(message->chat->id, does_exist ? "Мы уже знакомы, тебя зовут " + filesystem_database::get_name(id) + ". Если  хочешь представиться иначе, напиши </setname [Имя]>": "Как тебя зовут? Используй команду </setname [Имя]> чтобы представиться");
         // #TODO create folder with user id
+    });
+    bot.getEvents().onCommand("setname", [&bot](TgBot::Message::Ptr message) {
+        printf("\x1B[34mCommand [setname]:\n\t\x1B[33mname: %s\x1B[0m\n", message->text.c_str());
     });
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");
@@ -63,7 +68,7 @@ int main() {
 
         TgBot::TgLongPoll longPoll(bot);
         while (true) {
-            printf("Long poll started\n");
+            //printf("Long poll started\n");
             longPoll.start();
         }
     } catch (std::exception& e) {
