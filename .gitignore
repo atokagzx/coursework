@@ -32,7 +32,7 @@
 *.app
 
 /build
-
+/database
 .DS_Store
 CMakeCache.txt
 CMakeFiles/

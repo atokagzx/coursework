@@ -1,7 +1,11 @@
 #include "filesystem_db.h"
 
 bool filesystem_database::does_exist(long chat_id) {
-    return true;
+    std::ifstream f;
+    f.open("../database/" + std::to_string(chat_id) + "/name.txt");
+    bool exist = !f.fail();
+    f.close();
+    return exist;
 }
 std::string filesystem_database::get_name(long chat_id) {
     return "Vasily, fix IT!!!";
@@ -19,5 +23,6 @@ std::string filesystem_database::get_token() {
     }
     if (f.is_open())
         f >> token;
+    f.close();
     return token;
 }

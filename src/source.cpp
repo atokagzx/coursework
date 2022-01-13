@@ -5,13 +5,20 @@
 #include <string>
 #include <tgbot/tgbot.h>
 #include "filesystem_db.h"
+#include <stdexcept>
 
-int max_size = 20480; // 20 Mbytes
+int max_size = 20480; // 20 kBytes
 int max_duration = 30; // 30 seconds
 std::string token;
+
+uint32_t calculate_hash(TgBot::Bot &bot, std::shared_ptr<TgBot::Video> &video) {
+    // Not developed yet.
+    // Just returns video size
+    return bot.getApi().getFile(video->fileId)->fileSize * video->duration;
+}
 int main() {
     token = filesystem_database::get_token();
-    printf("\x1B[34mToken: \x1B[33m%s**********%s\x1B[0m\n", token.substr(0, 18).c_str(), token.substr(28, 46).c_str());
+    printf("\x1B[34mToken: \x1B[33m%s**********%s\x1B[0m\n", token.substr(0, 18).c_str(), token.substr(28, 18).c_str());
     TgBot::Bot bot(token);
     bot.getEvents().onAnyMessage([&bot](TgBot::Message::Ptr message) {
             /*
@@ -27,13 +34,14 @@ int main() {
             if (message->video) {
                 auto file_info = bot.getApi().getFile(message->video->fileId);
                 std::string file_id = message->video->fileId;
-                float file_size = file_info->fileSize / 1024.0;
+                float file_size_kbytes = file_info->fileSize / 1024.0;
                 int32_t duration = message->video->duration;
                 std::string file_name = file_info->filePath;
-                bool should_save = (file_size <= max_size) && (duration <= max_duration);
-                printf("\x1B[34mVideo:\x1B[33m\n\tfile id: %s\n\tsize: %f Bytes\n\tduration: %d sec\n\tfile path: %s\n\tshould_download: %s\x1B[0m\n", file_id.c_str(), file_size, duration, file_name.c_str(), (should_save ? "true" : "false"));
+                bool should_save = (file_size_kbytes <= max_size) && (duration <= max_duration);
+                uint32_t hash = calculate_hash(bot, message->video);    
+                printf("\x1B[34mVideo:\x1B[33m\n\tfile id: %s\n\tsize: %f kBytes\n\tduration: %d sec\n\tfile path: %s\n\tshould_download: %s\n\thash: %d\x1B[0m\n", file_id.c_str(), file_size_kbytes, duration, file_name.c_str(), (should_save ? "true" : "false"), hash);
                 if (should_save) {
-                    std::ofstream out(file_id + ".mp4", std::ios::binary);
+                    std::ofstream out(std::to_string(hash) + ".mp4", std::ios::binary);
                     auto downloaded = bot.getApi().downloadFile(file_info->filePath);
                     out << downloaded;
                 } else {
@@ -55,7 +63,9 @@ int main() {
         // #TODO create folder with user id
     });
     bot.getEvents().onCommand("setname", [&bot](TgBot::Message::Ptr message) {
-        printf("\x1B[34mCommand [setname]:\n\t\x1B[33mname: %s\x1B[0m\n", message->text.c_str());
+        std::string name = message->text.substr(8);
+        printf("\x1B[34mCommand [setname]:\n\t\x1B[33mname: %s\x1B[0m\n", name.c_str());
+        bot.getApi().sendMessage(message->chat->id, "Будем знакомы, " + name);
     });
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");
