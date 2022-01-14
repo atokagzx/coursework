@@ -1,7 +1,10 @@
-#ifndef filesystem_db_lib
-#define filesystem_db_lib
+#ifndef filesystem_db_lib_h
+#define filesystem_db_lib_h
+
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <stdlib.h>
 #if __has_include(<std::filesystem>)
   #include <filesystem>
   namespace fs = std::filesystem;
@@ -11,13 +14,16 @@
 #else
   error "Missing the <filesystem> header."
 #endif
-#include <fstream>
 
 struct filesystem_database {
-    static std::string set_name(long chat_id, std::string name) {std::cerr << "Method not set"; return name;}
-    static bool does_exist(long chat_id);   
+    static void set_name(long chat_id, std::string name);
+    static bool does_user_exist(long chat_id);   
+    static bool does_video_exist(long chat_id, uint32_t hash);   
     static std::string get_name(long chat_id);
     static std::string get_token();
+    static void makedir(std::string dir);
+    static void makedir();
+    static void save_reply(long chat_id, uint32_t hash, std::string &text);
 };
 
 #endif

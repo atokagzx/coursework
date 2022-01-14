@@ -1,14 +1,61 @@
-#include "filesystem_db.h"
+#ifndef filesystem_db_lib_cpp
+#define filesystem_db_lib_cpp
 
-bool filesystem_database::does_exist(long chat_id) {
-    std::ifstream f;
-    f.open("../database/" + std::to_string(chat_id) + "/name.txt");
-    bool exist = !f.fail();
-    f.close();
-    return exist;
+#include "filesystem_db.h"
+#include <sys/stat.h>
+
+void filesystem_database::makedir(std::string dir) {
+    std::system("mkdir ./database/");
+    std::system(("mkdir ./database/" + dir).c_str());
 }
+
+void filesystem_database::makedir() {std::system("mkdir ./database");}
+
+bool filesystem_database::does_user_exist(long chat_id) {
+    std::string dir ="database/" + std::to_string(chat_id);
+    std::ifstream file;
+    file.open(dir + "/!name.txt");
+    bool ret = file.is_open();
+    file.close();
+    return ret;
+}
+
+bool filesystem_database::does_video_exist(long chat_id, uint32_t hash) {
+    std::string dir ="database/" + std::to_string(chat_id) + "/" + std::to_string(hash) +  ".mp4";
+    std::ifstream file;
+    file.open(dir);
+    bool ret = file.is_open();
+    file.close();
+    return ret;
+}
+
 std::string filesystem_database::get_name(long chat_id) {
-    return "Vasily, fix IT!!!";
+    std::string dir = "database/" + std::to_string(chat_id);
+    std::ifstream file;
+    file.open(dir + "/!name.txt");
+    std::string out = "";
+    if(file) {
+        std::getline(file, out);
+        file.close();
+    }
+    return out;
+}
+
+void filesystem_database::set_name(long chat_id, std::string name) {
+    std::string dir = "database/" + std::to_string(chat_id);
+    makedir(std::to_string(chat_id));
+    std::ofstream file;
+    file.open(dir + "/!name.txt");
+    file << name;
+    file.close();
+}
+
+void filesystem_database::save_reply(long chat_id, uint32_t hash, std::string &text) {
+    std::string dir ="database/" + std::to_string(chat_id) + "/" + std::to_string(hash) +  ".txt";
+    std::ofstream file;
+    file.open(dir);
+    file << text;
+    file.close();
 }
 
 std::string filesystem_database::get_token() {
@@ -26,3 +73,4 @@ std::string filesystem_database::get_token() {
     f.close();
     return token;
 }
+#endif
