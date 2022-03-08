@@ -6,6 +6,7 @@
 #include <tgbot/tgbot.h>
 #include "filesystem_db.h"
 #include <stdexcept>
+#include <telebot.h>
 
 int max_size = 20480; // 20 kBytes
 int max_duration = 30; // 30 seconds
@@ -72,6 +73,7 @@ struct process_msgs
         if (should_save) {
             bot.getApi().sendMessage(message->chat->id, "Описание принято", false, message->messageId);  
             filesystem_database::save_reply(message->chat->id, hash, message->text);
+            
         }
             
     }
