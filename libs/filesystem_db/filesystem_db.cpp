@@ -5,11 +5,11 @@
 #include <sys/stat.h>
 
 void filesystem_database::makedir(std::string dir) {
-    std::system(("mkdir " + DB_PATH + "database/").c_str());
-    std::system(("mkdir " + DB_PATH + "database/" + dir).c_str());
+    std::system(("mkdir -p " + DB_PATH + "database/").c_str());
+    std::system(("mkdir -p " + DB_PATH + "database/" + dir).c_str());
 }
 
-void filesystem_database::makedir() {std::system(("mkdir " + DB_PATH + "database").c_str());}
+void filesystem_database::makedir() {std::system(("mkdir -p " + DB_PATH + "database").c_str());}
 
 bool filesystem_database::does_user_exist(long chat_id) {
     std::string dir = DB_PATH + "database/" + std::to_string(chat_id);
