@@ -5,8 +5,8 @@ set(Libs
     ${Boost_LIBRARIES} 
     ${CURL_LIBRARIES}
     filesystem_db
-    telebot
     )
-
-add_executable(videobot source.cpp)
+include_directories(answers)
+set(SOURCES answers/answers.h answers/answers.cpp)
+add_executable(videobot main.cpp ${SOURCES})
 target_link_libraries(videobot ${Libs})

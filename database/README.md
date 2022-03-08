@@ -1,0 +1,1 @@
+This folder uses for your database.

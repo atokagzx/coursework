@@ -33,6 +33,7 @@
 
 /build
 /database
+/docs
 .DS_Store
 CMakeCache.txt
 CMakeFiles/

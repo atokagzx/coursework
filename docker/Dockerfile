@@ -2,7 +2,7 @@ ARG from
 
 FROM ${from}
 
-LABEL Yaroslav Savelev "m2003578@edu.misis.ru"
+LABEL Yaroslav Savelev "y.savelev@edu.misis.ru"
 
 # Timezone Configuration
 ENV TZ=Europe/Moscow
@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y apt-utils \
                                          libcurl4-openssl-dev \
                                          git \
                                          mc \
-                                         vim \
                                          g++ \
                                          make \
                                          binutils \
@@ -35,3 +34,15 @@ RUN git clone https://github.com/reo7sp/tgbot-cpp.git \
     && cmake . \
     && make -j4 \
     && make install
+
+RUN git clone https://github.com/doxygen/doxygen.git 
+
+RUN apt install flex -y \
+    && apt install bison -y \
+    && cd doxygen \
+    && cmake -G "Unix Makefiles" . \
+    && make \
+    && make install
+    
+RUN apt install graphviz -y
+RUN mkdir /BOT_DB

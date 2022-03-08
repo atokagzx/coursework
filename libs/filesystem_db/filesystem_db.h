@@ -1,6 +1,7 @@
 #ifndef filesystem_db_lib_h
 #define filesystem_db_lib_h
 
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -14,7 +15,7 @@
 #else
   error "Missing the <filesystem> header."
 #endif
-
+const std::string DB_PATH = "/BOT_DB/";
 struct filesystem_database {
     static void set_name(long chat_id, std::string name);
     static bool does_user_exist(long chat_id);   
