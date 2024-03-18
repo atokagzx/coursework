@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y apt-utils \
                                          zlib1g-dev
 
 # very important libraries :)
-RUN git clone https://github.com/reo7sp/tgbot-cpp.git \
+RUN git clone https://github.com/reo7sp/tgbot-cpp.git -b v1.6 \
     && cd tgbot-cpp \
     && cmake . \
     && make -j4 \
@@ -37,8 +37,7 @@ RUN git clone https://github.com/reo7sp/tgbot-cpp.git \
 
 RUN git clone https://github.com/doxygen/doxygen.git 
 
-RUN apt install flex -y \
-    && apt install bison -y \
+RUN apt install flex bison -y \
     && cd doxygen \
     && cmake -G "Unix Makefiles" . \
     && make \
