@@ -64,7 +64,7 @@ std::string filesystem_database::get_token() {
     std::ios_base::iostate exceptionMask = f.exceptions() | std::ios::failbit;
     f.exceptions(exceptionMask);
     try {
-        f.open(DB_PATH + "token.txt");
+        f.open("/run/secrets/tg_token");
     } catch (std::ios_base::failure& e) {
         std::cerr << e.what() << '\n';
     }

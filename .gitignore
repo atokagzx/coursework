@@ -33,7 +33,8 @@
 
 /build
 /database
-/docs
+/docs/html
+/docs/*.docx
 .DS_Store
 CMakeCache.txt
 CMakeFiles/
@@ -45,4 +46,4 @@ echobot
 *.jpg
 *.mp4
 *.mov
-token.txt
+*.secret.txt

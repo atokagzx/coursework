@@ -1,6 +1,13 @@
 #ifndef answers_cpp
 #define answers_cpp
 #include <answers.h>
+#include "pqxx/pqxx"
+#include <iostream>
+#include "pgsql_db.h"
+
+// std::string process_msgs::db_conninfo;
+// pqxx::connection process_msgs::dbConn;
+
 
 uint32_t calculate_hash(TgBot::Bot &bot, std::shared_ptr<TgBot::Video> &video) {
     // Not developed yet.
@@ -11,6 +18,8 @@ uint32_t calculate_hash(TgBot::Bot &bot, std::shared_ptr<TgBot::Video> &video) {
 void process_msgs::command_start(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     long id = message->chat->id;
     bool does_exist = filesystem_database::does_user_exist(id);
+    // pqxx::connection connection(db_conninfo);
+    // User user = User::getUserById(connection, id);
     printf("\x1B[34mCommand [start]:\n\t\x1B[33mid: %ld\n\texist: %s\x1B[0m\n", id, (does_exist ? "true" : "false"));
     bot.getApi().sendMessage(message->chat->id, does_exist ? "Мы уже знакомы, тебя зовут " + filesystem_database::get_name(id) + ". Если  хочешь представиться иначе, напиши </setname [Имя]>": "Как тебя зовут? Используй команду </setname [Имя]> чтобы представиться");
 }
