@@ -38,7 +38,6 @@
 .DS_Store
 CMakeCache.txt
 CMakeFiles/
-Makefile
 cmake_install.cmake
 config.txt
 echobot
