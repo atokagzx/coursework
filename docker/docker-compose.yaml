@@ -62,6 +62,7 @@ services:
     volumes:
       - ../app/:/root/app
       - /var/www/VideoBot:/var/www/VideoBot
+      - /$HOME/.cache/VideoBot_DB:/BOT_DB
     networks:
       - postgres_net
     depends_on:
