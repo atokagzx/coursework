@@ -65,8 +65,8 @@ services:
       - /$HOME/.cache/VideoBot_DB:/BOT_DB
     networks:
       - postgres_net
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
