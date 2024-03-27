@@ -33,11 +33,11 @@
 
 /build
 /database
-/docs
+/docs/html
+/docs/*.docx
 .DS_Store
 CMakeCache.txt
 CMakeFiles/
-Makefile
 cmake_install.cmake
 config.txt
 echobot
@@ -45,4 +45,4 @@ echobot
 *.jpg
 *.mp4
 *.mov
-token.txt
+*.secret.txt

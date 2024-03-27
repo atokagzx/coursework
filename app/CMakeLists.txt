@@ -9,6 +9,11 @@ find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 find_package(CURL)
+find_package(PkgConfig REQUIRED)
+find_library(PQXX_LIB pqxx)
+find_library(PQ_LIB pq)
+# pkg_check_modules(PQXX REQUIRED pqxx)
+include_directories(${PQXX_INCLUDE_DIRS})
 
 if (CURL_FOUND)
     include_directories(${CURL_INCLUDE_DIRS})
@@ -18,3 +23,5 @@ endif()
 add_subdirectory(libs)
 
 add_subdirectory(src)
+
+install(TARGETS videobot DESTINATION bin)

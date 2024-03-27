@@ -1,19 +1,44 @@
 #ifndef answers_cpp
 #define answers_cpp
 #include <answers.h>
+#include "pqxx/pqxx"
+#include <iostream>
+#include "pgsql_db.h"
 
+// std::string process_msgs::db_conninfo;
+// pqxx::connection process_msgs::dbConn;
+
+/**
+ * @brief Вычисляет хеш видеофайла.
+ * @param bot - объект бота
+ * @param video - видеофайл
+ * @return uint32_t - хеш видеофайла
+ */
 uint32_t calculate_hash(TgBot::Bot &bot, std::shared_ptr<TgBot::Video> &video) {
     // Not developed yet.
     // Just returns video size
     return bot.getApi().getFile(video->fileId)->fileSize * video->duration;
 }
 
+/**
+ * @brief Обрабатывает сообщения, не являющиеся командами.
+ * @param bot - объект бота
+ * @param message - сообщение
+ */
 void process_msgs::command_start(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     long id = message->chat->id;
     bool does_exist = filesystem_database::does_user_exist(id);
+    // pqxx::connection connection(db_conninfo);
+    // User user = User::getUserById(connection, id);
     printf("\x1B[34mCommand [start]:\n\t\x1B[33mid: %ld\n\texist: %s\x1B[0m\n", id, (does_exist ? "true" : "false"));
     bot.getApi().sendMessage(message->chat->id, does_exist ? "Мы уже знакомы, тебя зовут " + filesystem_database::get_name(id) + ". Если  хочешь представиться иначе, напиши </setname [Имя]>": "Как тебя зовут? Используй команду </setname [Имя]> чтобы представиться");
 }
+
+/**
+ * @brief Обрабатывает команду setname.
+ * @param bot - объект бота
+ * @param message - сообщение
+ */
 void process_msgs::set_name(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     std::string name = message->text.substr(8);
     if (name.length() <= 1) {
@@ -26,6 +51,12 @@ void process_msgs::set_name(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
         bot.getApi().sendMessage(message->chat->id, "Будем знакомы, " + name, false, message->messageId);
     }
 }
+
+/**
+ * @brief Обрабатывает полученное видео. Сохраняет видеофайл в директории пользователя.
+ * @param bot - объект бота
+ * @param message - сообщение
+ */
 void process_msgs::received_video(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     bool user_exist = filesystem_database::does_user_exist(message->chat->id);
     std::string user_name = filesystem_database::get_name(message->chat->id);
@@ -51,6 +82,11 @@ void process_msgs::received_video(TgBot::Bot &bot, TgBot::Message::Ptr &message)
     }
 }
 
+/**
+ * @brief Обрабатывает ответ на видеофайл. Сохраняет описание видеофайла.
+ * @param bot - объект бота
+ * @param message - сообщение
+ */
 void process_msgs::on_video_reply(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     std::string file_id = message->replyToMessage->video->fileId;
     uint32_t hash = calculate_hash(bot, message->replyToMessage->video);

@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "videobot",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "videobot",
+            "Username": "postgres",
+            "PassFile": "",
+            "SSLMode": "prefer"
+        }
+    }
+  }
