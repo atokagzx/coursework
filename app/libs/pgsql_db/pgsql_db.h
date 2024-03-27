@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <pqxx/pqxx>
 
+/**
+ * @brief Класс описывающий пользователя в базе данных
+ */
 class User {
 public:
     int user_id;

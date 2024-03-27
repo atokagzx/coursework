@@ -11,48 +11,48 @@ volumes:
     driver: local
 
 secrets:
-  db_password:
-    file: db_password.secret.txt
+  # db_password:
+  #   file: db_password.secret.txt
   tg_token:
     file: tg_token.secret.txt
 
 services:
-  postgres:
-    image: postgres:16.1
-    container_name: videobot_postgres
-    networks:
-      - postgres_net 
-    expose:
-      - 5442
-    ports:
-      - "5442:5432"
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
-      - POSTGRES_DB=${POSTGRES_DB:-videobot}
-      - PGDATA=/var/lib/postgresql/data/pgdata
-    secrets:
-      - db_password
-    volumes:
-      - videobot_data:/var/lib/postgresql/data
-    restart: unless-stopped
+  # postgres:
+  #   image: postgres:16.1
+  #   container_name: videobot_postgres
+  #   networks:
+  #     - postgres_net 
+  #   expose:
+  #     - 5442
+  #   ports:
+  #     - "5442:5432"
+  #   environment:
+  #     - POSTGRES_USER=${POSTGRES_USER:-postgres}
+  #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+  #     - POSTGRES_DB=${POSTGRES_DB:-videobot}
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #   secrets:
+  #     - db_password
+  #   volumes:
+  #     - videobot_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
     
-  pgadmin:
-    image: dpage/pgadmin4:8.2
-    container_name: videobot_pgadmin
-    networks:
-      - postgres_net
-    ports:
-      - "5050:80"
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-admin@admin.org}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-      - videobot_cache:/var/lib/pgadmin
-      - type: bind
-        source: ./servers.json
-        target: /pgadmin4/servers.json
-    restart: unless-stopped
+  # pgadmin:
+  #   image: dpage/pgadmin4:8.2
+  #   container_name: videobot_pgadmin
+  #   networks:
+  #     - postgres_net
+  #   ports:
+  #     - "5050:80"
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-admin@admin.org}
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #   volumes:
+  #     - videobot_cache:/var/lib/pgadmin
+  #     - type: bind
+  #       source: ./servers.json
+  #       target: /pgadmin4/servers.json
+  #   restart: unless-stopped
     
   backend:
     build:

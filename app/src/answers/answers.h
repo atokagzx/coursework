@@ -8,6 +8,10 @@
 
 #define MAX_SIZE 20480 // 20 kBytes
 #define MAX_DURATION 30 // 30 seconds
+
+/**
+ * @brief Класс обработки сообщений бота
+ */
 struct process_msgs
 {   
     static void command_start(TgBot::Bot &bot, TgBot::Message::Ptr &message);

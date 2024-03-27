@@ -7,6 +7,9 @@
 #include "pgsql_db.h"
 
 
+/**
+ * @brief Класс описывающий пользователя в базе данных
+ */
 User User::create(pqxx::connection& dbConn, std::string username, std::string role) {
     User user;
     try {
@@ -25,6 +28,9 @@ User User::create(pqxx::connection& dbConn, std::string username, std::string ro
     return user;
 }
 
+/**
+ * @brief Функция для получения пользователя по его идентификатору
+ */
 User User::getUserById(pqxx::connection& dbConn, int id) {
     User user;
     std::cout << "getUserById" << std::endl;
@@ -96,7 +102,10 @@ User User::getUserById(pqxx::connection& dbConn, int id) {
 //     // Functions for update, delete, etc. would be similar
 // };
 
-
+/**
+ * @brief  Класс описывающий видео в базе данных
+ * 
+ */
 class Video {
 public:
     int video_id;
@@ -105,7 +114,12 @@ public:
     std::string description;
     int user_id;
 
-    // Function to insert a new video into the database
+
+    /**
+     * @brief  Создает новую запись в таблице video
+     * 
+     * @param dbConn - соединение с базой данных
+     */
     void create(pqxx::connection& dbConn) {
         try {
             pqxx::work W(dbConn);
@@ -120,7 +134,13 @@ public:
         }
     }
 
-    // Static function to fetch a video by video_id
+    /**
+     * @brief  Получает видео по его идентификатору
+     * 
+     * @param dbConn - соединение с базой данных
+     * @param id - идентификатор видео
+     * @return Video - объект видео
+     */
     static Video getVideoById(pqxx::connection& dbConn, int id) {
         Video video;
         try {
