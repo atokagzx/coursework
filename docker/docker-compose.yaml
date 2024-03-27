@@ -68,13 +68,13 @@ services:
     # depends_on:
     #   - postgres
     environment:
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
-      - POSTGRES_DB=${POSTGRES_DB:-videobot}
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      # - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      # - POSTGRES_DB=${POSTGRES_DB:-videobot}
+      # - POSTGRES_HOST=postgres
+      # - POSTGRES_PORT=5432
     secrets:
-      - db_password
+      # - db_password
       - tg_token
     working_dir: /root/app
     entrypoint: 
