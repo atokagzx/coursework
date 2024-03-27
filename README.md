@@ -6,24 +6,11 @@
 
 My coursework on the subject of "Programming Technologies". Telegram bot implements the receipt of short videos.
 
-## Running manual <a name="manual"></a>
+## Running in compose <a name="manual"></a>
 
 ```bash
 git clone https://github.com/atokagzx/coursework
-cd coursework
-touch config.txt
-```
-paste your token into `config.txt`
-```bash
-bash docker/buid_docker.sh
-bash docker/run_docker.sh
-```
-you will be inside docker container, run following:
-```bash
-cd /videobot
-mkdir build
-cd build 
-cmake ..
-make
-./src/videobot
+cd docker
+touch tg_token.secret.txt
+echo "token" > tg_token.secret.txt
 ```
