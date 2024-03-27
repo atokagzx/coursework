@@ -12,6 +12,10 @@
 std::string token;
 std::string db_conninfo;
 
+/**
+ * @brief Получение credentials для подключения к базе данных
+ * @return строка с данными для подключения к базе данных
+ */
 std::string get_conninfo() {
     std::string pg_user = std::getenv("POSTGRES_USER");
     std::string pg_password_file = std::getenv("POSTGRES_PASSWORD_FILE");
@@ -38,7 +42,7 @@ int main() {
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     token = filesystem_database::get_token();
-    db_conninfo = get_conninfo();
+    // db_conninfo = get_conninfo();
     printf("\x1B[34mToken: \x1B[33m%s**********%s\x1B[0m\n", token.substr(0, 18).c_str(), token.substr(28, 18).c_str());
     printf("\x1B[34mDB conninfo: \x1B[33m%s\x1B[0m\n", db_conninfo.c_str());
 
