@@ -13,7 +13,7 @@
   #include <experimental/filesystem> 
   namespace fs = std::experimental::filesystem;
 #else
-  error "Missing the <filesystem> header."
+  #error "Missing the <filesystem> header."
 #endif
 const std::string DB_PATH = "/BOT_DB/";
 
