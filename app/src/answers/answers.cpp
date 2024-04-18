@@ -1,12 +1,7 @@
 #ifndef answers_cpp
 #define answers_cpp
 #include <answers.h>
-#include "pqxx/pqxx"
 #include <iostream>
-#include "pgsql_db.h"
-
-// std::string process_msgs::db_conninfo;
-// pqxx::connection process_msgs::dbConn;
 
 /**
  * @brief Вычисляет хеш видеофайла.
@@ -28,8 +23,6 @@ uint32_t calculate_hash(TgBot::Bot &bot, std::shared_ptr<TgBot::Video> &video) {
 void process_msgs::command_start(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     long id = message->chat->id;
     bool does_exist = filesystem_database::does_user_exist(id);
-    // pqxx::connection connection(db_conninfo);
-    // User user = User::getUserById(connection, id);
     printf("\x1B[34mCommand [start]:\n\t\x1B[33mid: %ld\n\texist: %s\x1B[0m\n", id, (does_exist ? "true" : "false"));
     bot.getApi().sendMessage(message->chat->id, does_exist ? "Мы уже знакомы, тебя зовут " + filesystem_database::get_name(id) + ". Если  хочешь представиться иначе, напиши </setname [Имя]>": "Как тебя зовут? Используй команду </setname [Имя]> чтобы представиться");
 }
@@ -60,15 +53,20 @@ void process_msgs::set_name(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
 void process_msgs::received_video(TgBot::Bot &bot, TgBot::Message::Ptr &message) {
     bool user_exist = filesystem_database::does_user_exist(message->chat->id);
     std::string user_name = filesystem_database::get_name(message->chat->id);
-    auto file_info = bot.getApi().getFile(message->video->fileId);
+
+    // 
+    // auto file_info = message -> video;
     std::string file_id = message->video->fileId;
-    float file_size_kbytes = file_info->fileSize / 1024.0;
+    float file_size_kbytes = message->video->fileSize / 1024.0;
     int32_t duration = message->video->duration;
-    std::string file_name = file_info->filePath;
     bool should_save = (file_size_kbytes <= MAX_SIZE) && (duration <= MAX_DURATION) && user_exist;
-    uint32_t hash = calculate_hash(bot, message->video);    
-    printf("\x1B[34mVideo:\x1B[33m\n\tuser name: %s\n\tfile id: %s\n\tsize: %f kBytes\n\tduration: %d sec\n\tfile path: %s\n\tshould_download: %s\n\thash: %d\x1B[0m\n", (user_exist ? user_name : "\x1B[31mnoname\x1B[33m").c_str(), file_id.c_str(), file_size_kbytes, duration, file_name.c_str(), (should_save ? "true" : "false"), hash);
+    printf("\x1B[34mVideo:\x1B[33m\n\tuser name: %s\n\tfile id: %s\n\tsize: %f kBytes\n\tduration: %d sec\n\tshould_download: %s\x1B[0m\n", (user_exist ? user_name : "\x1B[31mnoname\x1B[33m").c_str(), file_id.c_str(), file_size_kbytes, duration, (should_save ? "true" : "false"));
+    // print should_save
+    // printf("\x1B[34mVideo:\x1B[33m\n\tuser name: %s\n\tfile id: %s\n\tsize: %f kBytes\n\tduration: %d sec\n\tshould_download: %s\n\thash: %d\x1B[0m\n", (user_exist ? user_name : "\x1B[31mnoname\x1B[33m").c_str(), file_id.c_str(), file_size_kbytes, duration, (should_save ? "true" : "false"), hash);
     if (should_save) {
+        uint32_t hash = calculate_hash(bot, message->video); 
+        auto file_info = bot.getApi().getFile(message->video->fileId);
+        std::string file_name = file_info->filePath;
         std::ofstream out("/BOT_DB/database/" + std::to_string(message->chat->id) + "/" + std::to_string(hash) + ".mp4", std::ios::binary);
         auto downloaded = bot.getApi().downloadFile(file_info->filePath);
         out << downloaded;

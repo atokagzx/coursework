@@ -4,7 +4,6 @@
 #include <string>
 #include <tgbot/tgbot.h>
 #include "filesystem_db.h"
-#include "pqxx/pqxx"
 
 #define MAX_SIZE 20480 // 20 kBytes
 #define MAX_DURATION 30 // 30 seconds

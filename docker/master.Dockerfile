@@ -36,6 +36,4 @@ RUN git clone https://github.com/reo7sp/tgbot-cpp.git -b v1.7.3 \
     && cmake . \
     && make -j4 \
     && make install
-
-RUN apt update && apt install -y libpq-dev libpqxx-dev \
-    && apt clean && rm -rf /var/lib/apt/lists/*
+    
